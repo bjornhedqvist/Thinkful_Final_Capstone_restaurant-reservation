@@ -10,6 +10,12 @@ function hasProperties(...properties) {
             throw error;
           }
         });
+        console.log(data.people)
+        if(!Number.isInteger(data.people)){
+            const error = new Error(`The people field must be a number`)
+            error.status = 400
+            throw error
+          }
         next();
       } catch (error) {
         next(error);
