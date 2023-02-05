@@ -1,8 +1,18 @@
 function hasProperties(...properties) {
     return function (req, res, next) {
       const { data = {} } = req.body;
+      //regex validatiors for date and time 
       const validDateFormat = /\d{4}-\d{2}-\d{2}/g
       const validTimeFormat = /[0-9]{2}:[0-9]{2}/g
+      //validatior for today's date, to prevent reservations from being created in the past
+      function getTodaysDate() {
+        const todayDate = new Date(Date.now());
+        const year = todayDate.getFullYear();
+        const month = todayDate.getMonth() + 1;
+        const day = todayDate.getDate();
+        const formattedDate = `${year}-${month}-${day}`;
+        return formattedDate;
+      }
   
       try {
         properties.forEach((property) => {
@@ -23,6 +33,10 @@ function hasProperties(...properties) {
             throw error
         }else if(!validTimeFormat.test(data.reservation_time)){
             const error = new Error(`The reservation_time field must be a valid time, ex. 18:00`)
+            error.status = 400
+            throw error
+        }else if(getTodaysDate() > data.reservation_date){
+            const error = new Error(`Date must be in the future`)
             error.status = 400
             throw error
         }
