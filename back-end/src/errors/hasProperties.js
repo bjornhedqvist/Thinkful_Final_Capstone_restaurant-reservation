@@ -13,6 +13,13 @@ function hasProperties(...properties) {
         const formattedDate = `${year}-${month}-${day}`;
         return formattedDate;
       }
+      //setup for getting the day of the week for tuesday validator
+      const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
+      const newResieDateCheck = new Date(data.reservation_date)
+      let resieWeekdayChecked = weekday[newResieDateCheck.getDay()+1]
+console.log(data.reservation_date)
+console.log(resieWeekdayChecked)
+console.log(resieWeekdayChecked === "Tuesday")
   
       try {
         properties.forEach((property) => {
@@ -23,6 +30,7 @@ function hasProperties(...properties) {
           }
         });
         //validatiors for people, reservation_date, and reservation_time field content
+        //validatiors for date in past, and tuesday
         if(!Number.isInteger(data.people)){
             const error = new Error(`The people field must be a number`)
             error.status = 400
@@ -35,8 +43,8 @@ function hasProperties(...properties) {
             const error = new Error(`The reservation_time field must be a valid time, ex. 18:00`)
             error.status = 400
             throw error
-        }else if(getTodaysDate() > data.reservation_date){
-            const error = new Error(`Date must be in the future`)
+        }else if((getTodaysDate() > data.reservation_date) || (resieWeekdayChecked === "Tuesday")){
+            const error = new Error(`Reservation date must be in the future, and not on a day we are closed (Tuesdays)`)
             error.status = 400
             throw error
         }
