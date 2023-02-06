@@ -17,9 +17,15 @@ function hasProperties(...properties) {
       const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
       const newResieDateCheck = new Date(data.reservation_date)
       let resieWeekdayChecked = weekday[newResieDateCheck.getDay()+1]
-console.log(data.reservation_date)
-console.log(resieWeekdayChecked)
-console.log(resieWeekdayChecked === "Tuesday")
+
+      //setup for reservation availability validator\
+      const resieHour = (data.reservation_time).slice(0,2)
+      const resieMin = (data.reservation_time).slice(3,5)
+      
+      let currentDate = new Date()
+      let currentTime = currentDate.getHours() + ":" + currentDate.getMinutes()
+      const currentTimeHour = (currentTime).slice(0,1)
+      const currentTimeMin = (currentTime).slice(2,4)
   
       try {
         properties.forEach((property) => {
@@ -31,6 +37,7 @@ console.log(resieWeekdayChecked === "Tuesday")
         });
         //validatiors for people, reservation_date, and reservation_time field content
         //validatiors for date in past, and tuesday
+        //validator for reservation time availibility, i.e. pre-closing, -post-opening, not in past time of current day
         if(!Number.isInteger(data.people)){
             const error = new Error(`The people field must be a number`)
             error.status = 400
@@ -47,6 +54,24 @@ console.log(resieWeekdayChecked === "Tuesday")
             const error = new Error(`Reservation date must be in the future, and not on a day we are closed (Tuesdays)`)
             error.status = 400
             throw error
+        }else if(data.reservation_date !== getTodaysDate() && resieHour <= "10"){
+            if(resieMin <= "30"){
+                const error = new Error(`Reservation time must be after 10:30 and before 21:30, and must be after the present time today`)
+                error.status = 400
+                throw error 
+            }
+        }else if(data.reservation_date !== getTodaysDate() && resieHour >= '21'){
+            if(resieMin >= '30'){
+                const error = new Error(`Reservation time must be after 10:30 and before 21:30, and must be after the present time today`)
+                error.status = 400
+                throw error 
+            }
+        }else if(data.reservation_date === getTodaysDate() && resieHour >= currentTimeHour){ 
+            if(resieMin >= currentTimeMin ){
+                const error = new Error(`Reservation time must be after 10:30 and before 21:30, and must be after the present time today`)
+                error.status = 400
+                throw error
+            }
         }
 
         next();
