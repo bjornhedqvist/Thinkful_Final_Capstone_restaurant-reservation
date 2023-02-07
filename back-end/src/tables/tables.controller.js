@@ -17,7 +17,6 @@ async function list(req, res) {
   for(let i = 0; i < data.length; i++){
     if(data[0].table_name.includes("Bar")){
       data.push(data.splice(0, 1)[0])
-      // data.push(data.splice(i, 1)[0])
     }
   }
   res.json({ data })
@@ -55,10 +54,6 @@ function tableExists(req, res, next) {
   .then((table) => {
     if (table) {
       res.locals.table = table;
-      
-      console.log(req.params.tableId)
-      console.log(res.locals.table)
-      
       return next();
     }
     next({ status: 404, message: `Table ${req.params.tableId} cannot be found.` });
@@ -86,6 +81,7 @@ async function update(req, res, next){
     .then((data) => res.json({ data }))
     .catch(next);
     console.log({data})
+    
 }
 
 module.exports = {

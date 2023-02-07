@@ -5,22 +5,23 @@ function hasSeatingProperties(...properties) {
     return async function (req, res, next) {
       const { data = {} } = req.body;
 
-      const readResieId = await reservationsService.read(data.reservation_id)
-      console.log(readResieId)
-
-      console.log(data)
-      console.log(res.locals.table)
+      //sends read request to reservations, for use checking if reservation exists and if table capacity is a match
+      let readResieId = null
+      if(data.reservation_id){
+         readResieId = await reservationsService.read(data.reservation_id)
+      }
       
+      //validators for data existence and reservation_id properties
+      //validators for table capacity and if table is occupied
       try {
         properties.forEach((property) => {
-          console.log(property)
           if (!data[property]) {
-            const error = new Error(`A reservation_id property is required.`);
+            const error = new Error(`A '${property}' property is required.`);
             error.status = 400;
             throw error;
           }
         });
-        if (res.locals.table == undefined){
+        if (!req.body.data){
           const error = new Error(`Expexted data, data appears to be missing. Recieved: '${data}'`);
             error.status = 400;
             throw error;
@@ -40,11 +41,6 @@ function hasSeatingProperties(...properties) {
           error.status = 400;
           throw error;
         }
-        // else if(res.locals.table.capacity > "number"){
-        //   const error = new Error(`Capacity input: '${data.capacity}' is invalid, capacity must be a number.`);
-        //   error.status = 400;
-        //   throw error;
-        // }
 
         next();
       } catch (error) {
