@@ -5,6 +5,9 @@ const hasTableProperties = require("../errors/hasTableProperties");
 const hasRequiredProperties = hasTableProperties("table_name",
 "capacity");
 
+const hasSeatingProperties = require("../errors/hasSeatingProperties")
+const hasRequiredSeatingProperties = hasSeatingProperties("reservation_id")
+
 /**
  * List handler for tables
  */
@@ -17,14 +20,15 @@ async function list(req, res) {
       // data.push(data.splice(i, 1)[0])
     }
   }
-  console.log(data)
   res.json({ data })
 }
 
 // create(POST) handler for new tables
 const VALID_PROPERTIES = [
   "table_name",
-  "capacity"
+  "capacity",
+  "table_id",
+  "reservation_id"
 ]
 
 function hasOnlyValidProperties(req, res, next){
@@ -47,25 +51,46 @@ async function create(req, res, next){
 //validates table exists for read table
 function tableExists(req, res, next) {
   service
-    .read(req.params.tableId)
-    .then((table) => {
-      if (table) {
-        res.locals.table = table;
-        return next();
-      }
-      next({ status: 404, message: `Table ${req.params.tableId} cannot be found.` });
-    })
-    .catch(next);
+  .read(req.params.tableId)
+  .then((table) => {
+    if (table) {
+      res.locals.table = table;
+      
+      console.log(req.params.tableId)
+      console.log(res.locals.table)
+      
+      return next();
+    }
+    next({ status: 404, message: `Table ${req.params.tableId} cannot be found.` });
+  })
+  .catch(next);
 }
 // read handler for table
 async function read(req, res, next){
   const {table: data} = res.locals
   res
-    .json({ data })
+  .json({ data })
+}
+
+//update handler for seating at a table
+async function update(req, res, next){
+  
+  console.log(req.body.data)
+  const updatedTable = {
+    ...req.body.data,
+    table_id: res.locals.table.table_id,
+  };
+  console.log(updatedTable)
+  service
+    .update(updatedTable)
+    .then((data) => res.json({ data }))
+    .catch(next);
+    console.log({data})
 }
 
 module.exports = {
   list: [asyncErrorBoundary(list) ],
   create: [hasOnlyValidProperties, hasRequiredProperties,  asyncErrorBoundary(create) ],
-  read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)]
+  read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
+  update: [asyncErrorBoundary(tableExists),hasOnlyValidProperties, asyncErrorBoundary(hasRequiredSeatingProperties), asyncErrorBoundary(update)]
 };

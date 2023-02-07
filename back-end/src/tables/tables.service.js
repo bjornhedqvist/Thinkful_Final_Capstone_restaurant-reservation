@@ -19,8 +19,16 @@ async function read(tableId){
     .first()
 }
 
+async function update(updatedTable){
+  return knex("tables")
+    .select("*")
+    .where({ table_id: updatedTable.table_id })
+    .update(updatedTable, "*")
+}
+
 module.exports = {
     list,
     read,
-    create
+    create,
+    update
   };
