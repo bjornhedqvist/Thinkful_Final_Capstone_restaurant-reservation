@@ -35,9 +35,6 @@ function hasProperties(...properties) {
       let currentTime = currentDate.getHours() + ":" + currentDate.getMinutes()
       const currentTimeHour = (currentTime).slice(0,1)
       const currentTimeMin = (currentTime).slice(2,4)
-
-      console.log(resieHour)
-      console.log(resieHour <= "10")
   
       try {
         properties.forEach((property) => {

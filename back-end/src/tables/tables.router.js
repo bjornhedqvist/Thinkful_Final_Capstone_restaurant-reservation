@@ -5,12 +5,15 @@
  */
 
 const router = require("express").Router();
-const controller = require("./reservations.controller");
+const controller = require("./tables.controller");
 
 router.route("/")
     .get(controller.list)
     .post(controller.create)
 
-router.route("/:reservation_Id")
+router.route("/:tableId/seat")
+
+router.route("/:tableId")
+    .get(controller.read)
 
 module.exports = router;
