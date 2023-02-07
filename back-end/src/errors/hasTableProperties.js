@@ -1,7 +1,7 @@
 function hasTableProperties(...properties) {
     return function (req, res, next) {
       const { data = {} } = req.body;
-      
+      //proerties validator and table_name length validator, capacity is a number validator
       try {
         properties.forEach((property) => {
           if (!data[property]) {

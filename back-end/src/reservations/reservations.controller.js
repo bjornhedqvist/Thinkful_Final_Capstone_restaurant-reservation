@@ -45,6 +45,26 @@ function hasOnlyValidProperties(req, res, next){
   next()
 }
 
+//validates reservation exists for read reservation
+function resieExists(req, res, next) {
+  service
+    .read(req.params.reservation_Id)
+    .then((reservation) => {
+      if (reservation) {
+        res.locals.reservation = reservation;
+        return next();
+      }
+      next({ status: 404, message: `Reservation ${req.params.reservation_Id} cannot be found.` });
+    })
+    .catch(next);
+}
+// read handler for reservation
+async function read(req, res, next){
+  const {reservation: data} = res.locals
+  res
+    .json({ data })
+}
+
 async function create(req, res, next){
   data = await service.create(req.body.data)
   res.status(201).json({ data })
@@ -52,5 +72,6 @@ async function create(req, res, next){
 
 module.exports = {
   list: [asyncErrorBoundary(list) ],
-  create: [hasOnlyValidProperties, hasRequiredProperties,  asyncErrorBoundary(create) ]
+  create: [hasOnlyValidProperties, hasRequiredProperties,  asyncErrorBoundary(create) ],
+  read: [asyncErrorBoundary(resieExists), asyncErrorBoundary(read)]
 };

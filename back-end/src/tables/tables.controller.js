@@ -44,7 +44,7 @@ async function create(req, res, next){
   res.status(201).json({ data })
 }
 
-//validates table exists for read tables
+//validates table exists for read table
 function tableExists(req, res, next) {
   service
     .read(req.params.tableId)
@@ -57,7 +57,7 @@ function tableExists(req, res, next) {
     })
     .catch(next);
 }
-// read handler for tables
+// read handler for table
 async function read(req, res, next){
   const {table: data} = res.locals
   res
