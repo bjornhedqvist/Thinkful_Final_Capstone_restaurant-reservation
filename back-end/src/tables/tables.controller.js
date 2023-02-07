@@ -69,19 +69,14 @@ async function read(req, res, next){
 
 //update handler for seating at a table
 async function update(req, res, next){
-  
-  console.log(req.body.data)
   const updatedTable = {
     ...req.body.data,
     table_id: res.locals.table.table_id,
   };
-  console.log(updatedTable)
   service
     .update(updatedTable)
     .then((data) => res.json({ data }))
     .catch(next);
-    console.log({data})
-    
 }
 
 module.exports = {
