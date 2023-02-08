@@ -81,10 +81,6 @@ function hasProperties(...properties) {
                 error.status = 400
                 throw error
             }
-        }else if (req.body.data.status && req.body.data.status !== "booked") {
-          const error = new Error(`status must be "booked", received: ${req.body.data.status}`);
-          error.status = 400;
-          throw error;
         }
 
         next();

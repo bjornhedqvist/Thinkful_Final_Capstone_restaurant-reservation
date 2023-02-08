@@ -32,7 +32,10 @@ const VALID_PROPERTIES = [
   "reservation_date",
   "reservation_time",
   "people",
-  "status"
+  "status",
+  "reservation_id",
+  "created_at",
+  "updated_at"
 ]
 
 function hasOnlyValidProperties(req, res, next){
@@ -67,6 +70,19 @@ async function read(req, res, next){
     .json({ data })
 }
 
+async function bookedCheck(req, res, next){
+  try{
+    if (req.body.data.status && req.body.data.status !== "booked") {
+      const error = new Error(`status must be "booked", received: ${req.body.data.status}`);
+      error.status = 400;
+      throw error;
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function create(req, res, next){
   data = await service.create(req.body.data)
   res.status(201).json({ data })
@@ -74,7 +90,7 @@ async function create(req, res, next){
 
 function hasStatusProperties(req, res, next){
   try{
-    if(req.body.data.status != 'booked' && req.body.data.status != 'seated' && req.body.data.status != 'finished'){
+    if(req.body.data.status != 'booked' && req.body.data.status != 'seated' && req.body.data.status != 'finished' && req.body.data.status != 'pending' && req.body.data.status != 'cancelled'){
         const error = new Error(`Error, status is unknown, recieved: '${req.body.data.status}'. Expected: booked, seated, or finished.`);
         error.status = 400;
         throw error;
@@ -101,11 +117,19 @@ async function update(req, res, next){
     .catch(next)
 }
 
+async function edit(req, res) {
+  const data = await service.edit(req.params.reservation_Id, req.body.data);
+  res.json({
+    data,
+  });
+}
+
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [
     hasOnlyValidProperties, 
-    hasRequiredProperties, 
+    hasRequiredProperties,
+    bookedCheck, 
     asyncErrorBoundary(create)
   ],
   read: [
@@ -117,5 +141,11 @@ module.exports = {
     hasOnlyValidProperties,
     hasStatusProperties,
     asyncErrorBoundary(update)
+  ],
+  edit: [
+    asyncErrorBoundary(resieExists),
+    hasOnlyValidProperties,
+    hasRequiredProperties,
+    asyncErrorBoundary(edit)
   ]
 };
