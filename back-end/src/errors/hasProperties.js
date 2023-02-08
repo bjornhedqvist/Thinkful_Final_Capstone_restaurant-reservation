@@ -35,7 +35,7 @@ function hasProperties(...properties) {
       let currentTime = currentDate.getHours() + ":" + currentDate.getMinutes()
       const currentTimeHour = (currentTime).slice(0,1)
       const currentTimeMin = (currentTime).slice(2,4)
-  
+
       try {
         properties.forEach((property) => {
           if (!data[property]) {
@@ -81,6 +81,10 @@ function hasProperties(...properties) {
                 error.status = 400
                 throw error
             }
+        }else if (req.body.data.status && req.body.data.status !== "booked") {
+          const error = new Error(`status must be "booked", received: ${req.body.data.status}`);
+          error.status = 400;
+          throw error;
         }
 
         next();

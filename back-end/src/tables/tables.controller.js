@@ -40,7 +40,7 @@ function hasOnlyValidProperties(req, res, next){
 }
 
 async function create(req, res, next){
-  data = await service.create(req.body.data)
+  let data = await service.create(req.body.data)
   res.status(201).json({ data })
 }
 
@@ -86,8 +86,24 @@ async function destroy(req, res, next){
 
 module.exports = {
   list: [asyncErrorBoundary(list) ],
-  create: [hasOnlyValidProperties, hasRequiredProperties,  asyncErrorBoundary(create) ],
-  read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
-  update: [asyncErrorBoundary(tableExists),hasOnlyValidProperties, asyncErrorBoundary(hasRequiredSeatingProperties), asyncErrorBoundary(update)],
-  delete: [asyncErrorBoundary(tableExists), asyncErrorBoundary(hasReqFinishProperties), destroy]
+  create: [
+    hasOnlyValidProperties,
+    hasRequiredProperties,
+    asyncErrorBoundary(create) 
+  ],
+  read: [
+    asyncErrorBoundary(tableExists),
+    asyncErrorBoundary(read)
+  ],
+  update: [
+    asyncErrorBoundary(tableExists),
+    hasOnlyValidProperties, 
+    asyncErrorBoundary(hasRequiredSeatingProperties),
+    asyncErrorBoundary(update)
+  ],
+  delete: [
+    asyncErrorBoundary(tableExists),
+    asyncErrorBoundary(hasReqFinishProperties),
+    destroy
+  ]
 };

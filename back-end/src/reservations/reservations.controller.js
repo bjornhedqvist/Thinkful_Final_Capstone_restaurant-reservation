@@ -29,6 +29,7 @@ const VALID_PROPERTIES = [
   "reservation_date",
   "reservation_time",
   "people",
+  "status"
 ]
 
 function hasOnlyValidProperties(req, res, next){
