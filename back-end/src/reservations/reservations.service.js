@@ -1,10 +1,27 @@
 const knex = require("../db/connection");
 // const mapProperties = require("../utils/map-properties");
 
-async function list() {
+// async function list() {
+//   return knex("reservations")
+//   .select()
+//   .orderBy("reservation_time")
+// }
+function list(date) {
   return knex("reservations")
-  .select()
-  .orderBy("reservation_time")
+    .select()
+    .where({ reservation_date: date.toString() })
+    .whereNot({ "reservations.status": "finished" })
+    .whereNot({ "reservations.status": "cancelled" })
+    .orderBy("reservation_time");
+}
+
+function search(mobile_number) {
+  return knex("reservations")
+    .whereRaw(
+      "translate(mobile_number, '() -', '') like ?",
+      `%${mobile_number.replace(/\D/g, "")}%`
+    )
+    .orderBy("reservation_date");
 }
 
 async function create(reservation){
@@ -31,6 +48,7 @@ async function update(updatedReservation){
 
 module.exports = {
     list,
+    search,
     create, 
     read,
     update

@@ -17,8 +17,9 @@ function hasReqFinishProperties(...properties) {
           const error = new Error(`table ${res.locals.table.table_name} is not occupied with a reservation.`);
           error.status = 400;
           throw error;
-        }else if(res.locals.table.reservation_id != null){
-          res.sendStatus(200)
+        }
+        else if(res.locals.table.reservation_id != null){
+          res.status(200)
         }
 
         next();

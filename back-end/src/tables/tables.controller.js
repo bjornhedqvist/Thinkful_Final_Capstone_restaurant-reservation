@@ -57,6 +57,7 @@ function tableExists(req, res, next) {
   })
   .catch(next);
 }
+
 // read handler for table
 async function read(req, res, next){
   const {table: data} = res.locals
@@ -69,29 +70,28 @@ async function read(req, res, next){
 async function seat(req, res) {
   const { reservation_id } = req.body.data;
   const { tableId } = req.params;
-  console.log(req.params)
-  console.log(tableId)
   const data = await service.seat(tableId, reservation_id);
   res.json({
     data,
   });
 }
 
+function notOccupied(req, res, next) {
+  const occupied = res.locals.table.reservation_id;
+  if (!occupied) {
+    return next({ status: 400, message: `table is not occupied` });
+  }
+  return next();
+}
+
+//unseat handler for finishing a table
 async function unseat(req, res) {
   const { table_id } = req.params;
   const { table } = res.locals;
   const data = await service.unseat(table);
   res.json({
-    data,
+    data
   });
-}
-
-//delete handler for finishing a table
-async function destroy(req, res, next){
-    service
-    .delete(res.locals.table.table_id)
-    .then(() => res.sendStatus(204))
-    .catch(next)
 }
 
 module.exports = {
@@ -113,12 +113,8 @@ module.exports = {
   ],
   unseat: [
     asyncErrorBoundary(tableExists),
-    asyncErrorBoundary(hasRequiredSeatingProperties),
-    asyncErrorBoundary(unseat)
-  ],
-  delete: [
-    asyncErrorBoundary(tableExists),
     asyncErrorBoundary(hasReqFinishProperties),
-    destroy
+    asyncErrorBoundary(notOccupied),
+    asyncErrorBoundary(unseat)
   ]
 };

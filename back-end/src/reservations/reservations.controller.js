@@ -9,19 +9,19 @@ const hasRequiredProperties = hasProperties("first_name",
 "reservation_time",
 "people");
 
-/**
- * List handler for reservation resources
- */
-async function list(req, res) {
-  let data = await service.list()
-  data = data
-    .filter((item)=>{ 
-      return item.reservation_date == req.query.date 
-    })
-    .filter((item)=>{
-      return item.status != 'finished'
-    })
-  res.json({ data })
+//List handler for reservations
+async function list(req, res, next) {
+  const today = new Date().toLocaleDateString().replace(/\//g, '-');
+  const { date = today, mobile_number } = req.query;
+  let reservations;
+  if (mobile_number) {
+    reservations = await service.search(mobile_number);
+  } else {
+    reservations = await service.list(date);
+  }
+  res.json({
+    data: [...reservations],
+  });
 }
 
 // create(POST) handler for new reservations

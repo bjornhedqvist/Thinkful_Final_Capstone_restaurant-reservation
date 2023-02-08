@@ -28,7 +28,7 @@ async function read(tableId){
 //     .update(updatedTable, "*")
 // }
 function seat(tableId, reservation_id) {
-  return knex.transaction(function (trx) {
+  return knex.transaction(async function (trx) {
     return trx("tables")
       .where({ table_id: tableId })
       .update({ reservation_id })
@@ -44,7 +44,7 @@ function seat(tableId, reservation_id) {
 }
 
 function unseat({ table_id, reservation_id }) {
-  return knex.transaction(function (trx) {
+  return knex.transaction(async function (trx) {
     return trx("tables")
       .where({ table_id })
       .update({ reservation_id: null })
@@ -59,17 +59,10 @@ function unseat({ table_id, reservation_id }) {
   });
 }
 
-async function destroy( table_id ){
-  return knex("tables")
-    .where({ table_id })
-    .del()
-}
-
 module.exports = {
     list,
     read,
     create,
     seat,
-    unseat,
-    delete: destroy,
+    unseat
   };
