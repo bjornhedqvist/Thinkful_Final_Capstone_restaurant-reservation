@@ -13,6 +13,7 @@ router.route("/")
 
 router.route("/:tableId/seat")
     .put(controller.update)
+    .delete(controller.delete)
 
 router.route("/:tableId")
     .get(controller.read)

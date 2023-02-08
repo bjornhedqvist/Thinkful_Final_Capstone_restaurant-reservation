@@ -8,6 +8,9 @@ const hasRequiredProperties = hasTableProperties("table_name",
 const hasSeatingProperties = require("../errors/hasSeatingProperties")
 const hasRequiredSeatingProperties = hasSeatingProperties("reservation_id")
 
+const hasFinishProperties = require("../errors/hasFinishProperties")
+const hasReqFinishProperties = hasFinishProperties("table_id")
+
 /**
  * List handler for tables
  */
@@ -79,9 +82,18 @@ async function update(req, res, next){
     .catch(next);
 }
 
+//delete handler for finishing a table
+async function destroy(req, res, next){
+    service
+    .delete(res.locals.table.table_id)
+    .then(() => res.sendStatus(204))
+    .catch(next)
+}
+
 module.exports = {
   list: [asyncErrorBoundary(list) ],
   create: [hasOnlyValidProperties, hasRequiredProperties,  asyncErrorBoundary(create) ],
   read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
-  update: [asyncErrorBoundary(tableExists),hasOnlyValidProperties, asyncErrorBoundary(hasRequiredSeatingProperties), asyncErrorBoundary(update)]
+  update: [asyncErrorBoundary(tableExists),hasOnlyValidProperties, asyncErrorBoundary(hasRequiredSeatingProperties), asyncErrorBoundary(update)],
+  delete: [asyncErrorBoundary(tableExists), asyncErrorBoundary(hasReqFinishProperties), destroy]
 };
