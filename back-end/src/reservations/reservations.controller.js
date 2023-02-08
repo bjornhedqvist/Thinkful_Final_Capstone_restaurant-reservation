@@ -16,7 +16,10 @@ async function list(req, res) {
   let data = await service.list()
   data = data
     .filter((item)=>{ 
-      return item.reservation_date == req.query.date
+      return item.reservation_date == req.query.date 
+    })
+    .filter((item)=>{
+      return item.status != 'finished'
     })
   res.json({ data })
 }
@@ -56,7 +59,6 @@ function resieExists(req, res, next) {
       next({ status: 404, message: `Reservation ${req.params.reservation_Id} cannot be found.` });
     })
     .catch(next);
-    console.log(res.locals)
 }
 // read handler for reservation
 async function read(req, res, next){
@@ -71,7 +73,6 @@ async function create(req, res, next){
 }
 
 function hasStatusProperties(req, res, next){
-  console.log(req.body.data)
   try{
     if(req.body.data.status != 'booked' && req.body.data.status != 'seated' && req.body.data.status != 'finished'){
         const error = new Error(`Error, status is unknown, recieved: '${req.body.data.status}'. Expected: booked, seated, or finished.`);
@@ -90,7 +91,6 @@ function hasStatusProperties(req, res, next){
 }
 
 async function update(req, res, next){
-  console.log(res.locals)
   const updatedReservation = {
     ...req.body.data,
     reservation_id: res.locals.reservation.reservation_id,

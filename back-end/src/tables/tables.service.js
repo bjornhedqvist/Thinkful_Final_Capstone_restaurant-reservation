@@ -21,11 +21,42 @@ async function read(tableId){
     .first()
 }
 
-async function update(updatedTable){
-  return knex("tables")
-    .select("*")
-    .where({ table_id: updatedTable.table_id })
-    .update(updatedTable, "*")
+// async function update(updatedTable){
+//   return knex("tables")
+//     .select("*")
+//     .where({ table_id: updatedTable.table_id })
+//     .update(updatedTable, "*")
+// }
+function seat(tableId, reservation_id) {
+  return knex.transaction(function (trx) {
+    return trx("tables")
+      .where({ table_id: tableId })
+      .update({ reservation_id })
+      .returning("*")
+      .then(() => {
+        return trx("reservations")
+          .where({ reservation_id })
+          .update({ status: "seated" })
+          .returning("*")
+          .then((updatedRes) => updatedRes[0]);
+      });
+  });
+}
+
+function unseat({ table_id, reservation_id }) {
+  return knex.transaction(function (trx) {
+    return trx("tables")
+      .where({ table_id })
+      .update({ reservation_id: null })
+      .returning("*")
+      .then(() => {
+        return trx("reservations")
+          .where({ reservation_id })
+          .update({ status: `finished` })
+          .returning("*")
+          .then((tableData) => tableData[0]);
+      });
+  });
 }
 
 async function destroy( table_id ){
@@ -38,6 +69,7 @@ module.exports = {
     list,
     read,
     create,
-    update,
+    seat,
+    unseat,
     delete: destroy,
   };

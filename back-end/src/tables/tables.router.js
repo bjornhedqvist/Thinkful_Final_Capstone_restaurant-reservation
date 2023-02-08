@@ -12,7 +12,7 @@ router.route("/")
     .post(controller.create)
 
 router.route("/:tableId/seat")
-    .put(controller.update)
+    .put(controller.seat)
     .delete(controller.delete)
 
 router.route("/:tableId")

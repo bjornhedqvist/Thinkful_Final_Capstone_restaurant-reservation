@@ -40,6 +40,10 @@ function hasSeatingProperties(...properties) {
           const error = new Error(`table ${res.locals.table.table_name} is occupied with reservation ${res.locals.table.reservation_id}.`);
           error.status = 400;
           throw error;
+        }else if(readResieId.status == 'seated'){
+          const error = new Error(`Error, status is currently '${readResieId.status}'. An already seated reservation cannot be seated.`);
+          error.status = 400;
+          throw error;
         }
 
         next();

@@ -64,16 +64,26 @@ async function read(req, res, next){
   .json({ data })
 }
 
-//update handler for seating at a table
-async function update(req, res, next){
-  const updatedTable = {
-    ...req.body.data,
-    table_id: res.locals.table.table_id,
-  };
-  service
-    .update(updatedTable)
-    .then((data) => res.json({ data }))
-    .catch(next);
+//seating handlers for seating and unseating at a table
+
+async function seat(req, res) {
+  const { reservation_id } = req.body.data;
+  const { tableId } = req.params;
+  console.log(req.params)
+  console.log(tableId)
+  const data = await service.seat(tableId, reservation_id);
+  res.json({
+    data,
+  });
+}
+
+async function unseat(req, res) {
+  const { table_id } = req.params;
+  const { table } = res.locals;
+  const data = await service.unseat(table);
+  res.json({
+    data,
+  });
 }
 
 //delete handler for finishing a table
@@ -95,11 +105,16 @@ module.exports = {
     asyncErrorBoundary(tableExists),
     asyncErrorBoundary(read)
   ],
-  update: [
+  seat: [
     asyncErrorBoundary(tableExists),
     hasOnlyValidProperties, 
     asyncErrorBoundary(hasRequiredSeatingProperties),
-    asyncErrorBoundary(update)
+    asyncErrorBoundary(seat)
+  ],
+  unseat: [
+    asyncErrorBoundary(tableExists),
+    asyncErrorBoundary(hasRequiredSeatingProperties),
+    asyncErrorBoundary(unseat)
   ],
   delete: [
     asyncErrorBoundary(tableExists),
