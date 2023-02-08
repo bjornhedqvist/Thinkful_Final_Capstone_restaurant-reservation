@@ -2,7 +2,9 @@ const knex = require("../db/connection");
 // const mapProperties = require("../utils/map-properties");
 
 async function list() {
-  return knex("tables").select("*");
+  return knex("tables")
+  .select()
+  .orderBy("table_name")
 }
 
 async function create(table){

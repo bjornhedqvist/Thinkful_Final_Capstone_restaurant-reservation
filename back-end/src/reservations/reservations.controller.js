@@ -18,8 +18,6 @@ async function list(req, res) {
     .filter((item)=>{ 
       return item.reservation_date == req.query.date
     })
-    .sort((a, b) => a.reservation_time.slice(0,1) - b.reservation_time.slice(0,1))
-    .sort((a, b) => a.reservation_time.slice(3,4) - b.reservation_time.slice(3,4))
   res.json({ data })
 }
 

@@ -16,12 +16,6 @@ const hasReqFinishProperties = hasFinishProperties("table_id")
  */
 async function list(req, res) {
   let data = await service.list()
-  data = data.sort((a, b) => a.table_name - b.table_name)
-  for(let i = 0; i < data.length; i++){
-    if(data[0].table_name.includes("Bar")){
-      data.push(data.splice(0, 1)[0])
-    }
-  }
   res.json({ data })
 }
 
