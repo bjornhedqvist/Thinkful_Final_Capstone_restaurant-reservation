@@ -14,6 +14,7 @@ router.route("/")
 router.route("/:reservation_Id")
     .get(controller.read)
 
-
+router.route("/:reservation_Id/status")
+    .put(controller.update)
 
 module.exports = router;

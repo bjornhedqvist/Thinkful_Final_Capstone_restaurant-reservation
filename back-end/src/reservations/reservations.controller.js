@@ -56,6 +56,7 @@ function resieExists(req, res, next) {
       next({ status: 404, message: `Reservation ${req.params.reservation_Id} cannot be found.` });
     })
     .catch(next);
+    console.log(res.locals)
 }
 // read handler for reservation
 async function read(req, res, next){
@@ -69,8 +70,52 @@ async function create(req, res, next){
   res.status(201).json({ data })
 }
 
+function hasStatusProperties(req, res, next){
+  console.log(req.body.data)
+  try{
+    if(req.body.data.status != 'booked' && req.body.data.status != 'seated' && req.body.data.status != 'finished'){
+        const error = new Error(`Error, status is unknown, recieved: '${req.body.data.status}'. Expected: booked, seated, or finished.`);
+        error.status = 400;
+        throw error;
+      }
+      if(res.locals.reservation.status == 'finished'){
+        const error = new Error(`Error, status is currently '${res.locals.reservation.status}'. A 'finished' reservation cannot be updated.`);
+        error.status = 400;
+        throw error;
+      }
+    next();
+  } catch (error) {
+      next(error);
+  }
+}
+
+async function update(req, res, next){
+  console.log(res.locals)
+  const updatedReservation = {
+    ...req.body.data,
+    reservation_id: res.locals.reservation.reservation_id,
+  }
+  service
+    .update(updatedReservation)
+    .then((data)=>res.json({ data }))
+    .catch(next)
+}
+
 module.exports = {
-  list: [asyncErrorBoundary(list) ],
-  create: [hasOnlyValidProperties, hasRequiredProperties,  asyncErrorBoundary(create) ],
-  read: [asyncErrorBoundary(resieExists), asyncErrorBoundary(read)]
+  list: [asyncErrorBoundary(list)],
+  create: [
+    hasOnlyValidProperties, 
+    hasRequiredProperties, 
+    asyncErrorBoundary(create)
+  ],
+  read: [
+    asyncErrorBoundary(resieExists),
+    asyncErrorBoundary(read)
+    ],
+  update: [
+    asyncErrorBoundary(resieExists),
+    hasOnlyValidProperties,
+    hasStatusProperties,
+    asyncErrorBoundary(update)
+  ]
 };
