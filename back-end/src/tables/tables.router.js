@@ -9,13 +9,13 @@ const controller = require("./tables.controller");
 
 router.route("/:tableId/seat")
     .put(controller.seat)
-    .delete(controller.unseat)
+    .delete(controller.unseat);
 
 router.route("/:tableId")
-    .get(controller.read)
+    .get(controller.read);
 
 router.route("/")
     .get(controller.list)
-    .post(controller.create)
+    .post(controller.create);
 
 module.exports = router;

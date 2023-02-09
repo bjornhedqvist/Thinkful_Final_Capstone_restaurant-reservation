@@ -8,14 +8,14 @@ const router = require("express").Router();
 const controller = require("./reservations.controller");
 
 router.route("/:reservation_Id/status")
-    .put(controller.update)
+    .put(controller.update);
 
 router.route("/:reservation_Id")
     .get(controller.read)
-    .put(controller.edit) 
+    .put(controller.edit);
 
 router.route("/")
     .get(controller.list)
-    .post(controller.create)
+    .post(controller.create);
 
 module.exports = router;

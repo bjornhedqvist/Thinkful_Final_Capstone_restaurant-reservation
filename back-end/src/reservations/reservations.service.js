@@ -18,30 +18,29 @@ function search(mobile_number) {
     .orderBy("reservation_date");
 }
 
-async function create(reservation){
-    return knex("reservations")
-        .insert(reservation)
-        .returning("*")
-        .then((createdRecords => createdRecords[0]))
+async function create(reservation) {
+  return knex("reservations")
+    .insert(reservation)
+    .returning("*")
+    .then((createdRecords) => createdRecords[0]);
 }
 
-async function read(reservationId){
+async function read(reservationId) {
   return knex("reservations")
     .select("*")
     .where({ reservation_id: reservationId })
-    .first()
+    .first();
 }
 
-async function update(updatedReservation){
+async function update(updatedReservation) {
   return knex("reservations")
     .select("*")
-    .where({ reservation_id: updatedReservation.reservation_id})
+    .where({ reservation_id: updatedReservation.reservation_id })
     .update(updatedReservation, "*")
-    .then((reservationData) => reservationData[0])
+    .then((reservationData) => reservationData[0]);
 }
 
 async function edit(reservation_id, data) {
-  const { status } = data;
   return knex("reservations")
     .select()
     .where({ reservation_id })
@@ -51,10 +50,10 @@ async function edit(reservation_id, data) {
 }
 
 module.exports = {
-    list,
-    search,
-    create, 
-    read,
-    update,
-    edit,
-  };
+  list,
+  search,
+  create,
+  read,
+  update,
+  edit,
+};
