@@ -1,11 +1,5 @@
 const knex = require("../db/connection");
-// const mapProperties = require("../utils/map-properties");
 
-// async function list() {
-//   return knex("reservations")
-//   .select()
-//   .orderBy("reservation_time")
-// }
 function list(date) {
   return knex("reservations")
     .select()
