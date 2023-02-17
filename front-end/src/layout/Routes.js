@@ -51,7 +51,7 @@ function Routes() {
         <NewReservation loadDashboard={loadDashboard}/>
       </Route>
       <Route exact={true} path="/reservations/:reservation_id/seat">
-        <SeatReservation tables={tables}/>
+        <SeatReservation tables={tables} loadDashboard={loadDashboard}/>
       </Route>
       <Route path="/dashboard">
         <Dashboard 

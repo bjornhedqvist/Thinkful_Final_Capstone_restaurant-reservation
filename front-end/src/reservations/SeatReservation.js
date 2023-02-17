@@ -4,8 +4,9 @@ import { useHistory, useParams } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 
 import { seatReservation, readReservation } from "../utils/api";
+import { formatAsDate } from "../utils/date-time";
 
-export default function SeatReservation({ tables }) {
+export default function SeatReservation({ tables, loadDashboard }) {
 
 	const history = useHistory();
 	const { reservation_id } = useParams();
@@ -81,7 +82,8 @@ export default function SeatReservation({ tables }) {
 		event.preventDefault();
 		if (validateSeat()) {
 			await seatReservation(reservation_id, tableId, abortController.signal);
-			history.push(`/dashboard?date=${reservation.reservation_date}`);
+            loadDashboard()
+			history.push(`/dashboard?date=${formatAsDate(reservation.reservation_date)}`);
 			return () => abortController.abort();
 		}
 	};
