@@ -44,6 +44,10 @@ function hasProperties(...properties) {
     const currentTimeHour = currentTime.slice(0, 1);
     const currentTimeMin = currentTime.slice(2, 4);
 
+    const reservationDate = new Date(
+      `${data.reservation_date}T${data.reservation_time}:00`
+    );
+
     try {
       properties.forEach((property) => {
         if (!data[property]) {
@@ -72,7 +76,7 @@ function hasProperties(...properties) {
         error.status = 400;
         throw error;
       } else if (
-        getTodaysDate() > data.reservation_date ||
+        Date.now() > Date.parse(reservationDate)||
         resieWeekdayChecked === "Tuesday"
       ) {
         const error = new Error(
