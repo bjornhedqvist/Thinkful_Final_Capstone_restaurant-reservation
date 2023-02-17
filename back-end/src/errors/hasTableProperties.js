@@ -16,9 +16,9 @@ function hasTableProperties(...properties) {
         );
         error.status = 400;
         throw error;
-      } else if (typeof data.capacity != "number") {
+      } else if (data.capacity < 1) {
         const error = new Error(
-          `Capacity input: '${data.capacity}' is invalid, capacity must be a number.`
+          `Capacity input: '${data.capacity}' is invalid, capacity must be a number greater than 1.`
         );
         error.status = 400;
         throw error;
