@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { listReservations, listTables } from "../utils/api";
+import React from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 import Reservation from "./Reservation";
 import Table from "./Table";
@@ -11,25 +10,7 @@ import DateNav from "./DateNav";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ date }) {
-  const [reservations, setReservations] = useState([]);
-  const [reservationsError, setReservationsError] = useState(null);
-
-  const [tables, setTables] = useState([]);
-  const [tablesError, setTablesError] = useState(null);
-
-  useEffect(loadDashboard, [date]);
-
-  function loadDashboard() {
-    const abortController = new AbortController();
-    setReservationsError(null);
-    setTablesError(null);
-    listReservations({ date }, abortController.signal)
-      .then(setReservations)
-      .catch(setReservationsError);
-      listTables(abortController.signal).then(setTables).catch(setTablesError);
-    return () => abortController.abort();
-  }
+function Dashboard({ date, reservations, reservationsError, tables, tablesError, loadDashboard }) {
 
   const reservationList = reservations.map((reservation) => (
     <Reservation
@@ -42,6 +23,7 @@ function Dashboard({ date }) {
   const tableList = tables.map((table) => (
     <Table loadDashboard={loadDashboard} key={table.table_id} table={table} />
   ));
+  
   return (
     <main>
     <div className="text-center my-4">

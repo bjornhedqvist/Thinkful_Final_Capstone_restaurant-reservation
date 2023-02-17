@@ -28,15 +28,15 @@ export default function Reservation({ reservation, loadDashboard }) {
 
   const statusElement =
     status === "booked" ? (
-      <div style={{ cursor: "default" }} className="btn btn-success">
+      <div style={{ cursor: "default" }} className="btn btn-outline-success">
         Booked
       </div>
     ) : status === "seated" ? (
-      <div style={{ cursor: "default" }} className="btn btn-warning">
+      <div style={{ cursor: "default" }} className="btn btn-outline-warning">
         Seated
       </div>
     ) : status === "cancelled" ? (
-      <div style={{ cursor: "default" }} className="btn btn-danger">
+      <div style={{ cursor: "default" }} className="btn btn-outline-danger">
         Cancelled
       </div>
     ) : (

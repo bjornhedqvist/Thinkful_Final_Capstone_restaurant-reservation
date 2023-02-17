@@ -4,8 +4,9 @@ import { createReservation } from "../utils/api";
 import FormatPhoneNum from "../utils/format-phone-number"
 import Form from "../Form"
 import ErrorAlert from "../layout/ErrorAlert";
+import { formatAsDate } from "../utils/date-time";
 
-export default function NewReservation(){
+export default function NewReservation({loadDashboard}){
     const history = useHistory()
 
     const initialFormState = {
@@ -78,7 +79,8 @@ export default function NewReservation(){
         !errors.length &&
           createReservation(formData, abortController.signal)
             .then((_) => {
-              history.push(`/dashboard?date=${formData.reservation_date}`);
+              loadDashboard()
+              history.push(`/dashboard?date=${formatAsDate(formData.reservation_date)}`);
             })
             .catch((e) => console.log(e));
     
