@@ -4,10 +4,22 @@ Backend Link (Render Web Service): https://thinkful-final-capstone-restaurant.on
 
 Frontend Link (Render Static Site): https://thinkful-final-capstone-restaurant-mmz6.onrender.com
 
-![a screenshot of the application](Thinkful_Final_Capstone_restaurant-reservation/screenshot.png "a screenshot of the application")
+![a screenshot of the application](screenshot.png "a screenshot of the application")
 
-            - [ ] Documentation of your API
-            - [ ] Screenshots of your application; this makes your application description much easier to understand
-            - [ ] A summary section that concisely explains what your application does; try to frame this from the standpoint of what the user does or how the application benefits the user
-            - [ ] A section on the technology used
-            - [ ] Installation instructions
+## Summary
+This React.js application, built using a inside-out approach (backend first, then frontend), is a simple and effective resaurant reservation managment tool. An employee using this software can easily create, edit, and keep track of seating for reservations made at the establishment. A user can also manage tables that the restaurant has available for seating, as well as thier status and capacity. Finally, a user can search for any reservation stored in the database by phone number, whether that reservation is booked, seated, finished, or cancelled. With Periodic Tables, your customers will be happy with the efficiency and efficacy of your venue's operations.
+
+## Technology Used
+This app makes use of the following:
+- React.js
+- Bootstrap CSS
+- Node
+- Express
+- PostgreSQL API
+
+## To install and run locally on your machine:
+
+1. Fork and clone this repository.
+1. Run `npm install`.
+1. Run `npm start`.
+1. You should not need to make changes to any files, simply view the application in your browser.
