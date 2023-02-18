@@ -9,6 +9,7 @@ import NewTable from "../tables/NewTable";
 import SeatReservation from "../reservations/SeatReservation"
 import { listReservations, listTables } from "../utils/api";
 import EditReservation from "../reservations/EditReservation"
+import Search from "./Search";
 
 /**
  * Defines all the routes for the application.
@@ -70,7 +71,9 @@ function Routes() {
       <Route path="/tables/new">
         <NewTable setTables={setTables}/>
       </Route>
-      
+      <Route path="/search">
+        <Search />
+      </Route>
       <Route>
         <NotFound />
       </Route>

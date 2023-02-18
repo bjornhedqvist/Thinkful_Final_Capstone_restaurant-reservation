@@ -10,8 +10,6 @@ import { formatAsDate } from "../utils/date-time";
 export default function EditReservation({ loadDashboard }) {
   const history = useHistory();
   const { reservation_id } = useParams();
-  
-  const [resie, setResie] = useState({})
 
   const initialFormState = {
     first_name: "",
@@ -26,15 +24,20 @@ export default function EditReservation({ loadDashboard }) {
   const [errors, setErrors] = useState([]);
   
   useEffect(() => {
-    async function loadRes() {
-      const abortController = new AbortController();
-      const thisRes = await readReservation(reservation_id, abortController.signal);
-      setResie(thisRes)
-      setFormData({ ...thisRes, reservation_date: formatAsDate(thisRes.reservation_date)});
-      return () => abortController.abort();
+    const abortController = new AbortController();
+
+    async function loadReservation() {
+      const resieToEdit = await readReservation(reservation_id, abortController.signal);
+        if(!abortController.signal.aborted){
+            setFormData({ ...resieToEdit, reservation_date: formatAsDate(resieToEdit.reservation_date)});
+        } 
     }
-    loadRes()
-  }, [reservation_id, setFormData, setResie]);
+    loadReservation()
+    return () => abortController.abort();
+    }, 
+    //eslint-disable-next-line
+        []
+    );
 
   const validationErrors = [];
 
@@ -112,7 +115,8 @@ export default function EditReservation({ loadDashboard }) {
   return (
     <>
       <div>
-        <h1 className="my-3 text-center">Edit Reservation</h1>
+        <h1 className="my-3 text-center">Edit Reservation for {formData.first_name} {formData.last_name}</h1>
+        <h5 className="my-3 text-center">Reservation ID: {reservation_id}</h5>
       </div>
       {errorsElement}
       <Form

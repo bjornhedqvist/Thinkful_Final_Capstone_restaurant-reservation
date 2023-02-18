@@ -22,6 +22,7 @@ export default function SeatReservation({ tables, loadDashboard }) {
 			.then(setReservation)
 			.catch(setReservationError);
 		return () => abortController.abort();
+        // eslint-disable-next-line
 	}, []);
 
 	if (!tables) return null;
