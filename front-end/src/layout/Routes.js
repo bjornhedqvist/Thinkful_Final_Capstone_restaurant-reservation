@@ -49,15 +49,6 @@ function Routes() {
       <Route exact={true} path="/reservations">
         <Redirect to={"/dashboard"} />
       </Route>
-      <Route exact={true} path="/reservations/new">
-        <NewReservation loadDashboard={loadDashboard}/>
-      </Route>
-      <Route exact={true} path="/reservations/:reservation_id/seat">
-        <SeatReservation tables={tables} loadDashboard={loadDashboard}/>
-      </Route>
-      <Route path="/reservations/:reservation_id/edit">
-				<EditReservation loadDashboard={loadDashboard}/>
-			</Route>
       <Route path="/dashboard">
         <Dashboard 
           date={ date }
@@ -68,11 +59,20 @@ function Routes() {
           loadDashboard={loadDashboard}
          />
       </Route>
-      <Route path="/tables/new">
-        <NewTable setTables={setTables}/>
-      </Route>
       <Route path="/search">
         <Search />
+      </Route>
+      <Route exact={true} path="/reservations/new">
+        <NewReservation loadDashboard={loadDashboard}/>
+      </Route>
+      <Route exact={true} path="/reservations/:reservation_id/seat">
+        <SeatReservation tables={tables} loadDashboard={loadDashboard}/>
+      </Route>
+      <Route path="/reservations/:reservation_id/edit">
+				<EditReservation loadDashboard={loadDashboard}/>
+			</Route>
+      <Route path="/tables/new">
+        <NewTable setTables={setTables}/>
       </Route>
       <Route>
         <NotFound />
