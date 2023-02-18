@@ -4,7 +4,7 @@ Backend Link (Render Web Service): https://thinkful-final-capstone-restaurant.on
 
 Frontend Link (Render Static Site): https://thinkful-final-capstone-restaurant-mmz6.onrender.com
 
-![alt text](screenshots/filename.png "Description goes here")
+![alt text](Screen Shot 2023-02-17 at 20.11.15 PM.png "Description goes here")
 
             - [ ] Documentation of your API
             - [ ] Screenshots of your application; this makes your application description much easier to understand
