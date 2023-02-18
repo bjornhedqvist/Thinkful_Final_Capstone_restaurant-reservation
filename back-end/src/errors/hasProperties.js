@@ -39,14 +39,25 @@ function hasProperties(...properties) {
     }
     setResieTime();
 
-    let currentDate = new Date();
+    const currentDate = new Date();
     let currentTime = currentDate.getHours() + ":" + currentDate.getMinutes();
     const currentTimeHour = currentTime.slice(0, 1);
     const currentTimeMin = currentTime.slice(2, 4);
 
     const reservationDate = new Date(
-      `${data.reservation_date}T${data.reservation_time}:00`
+      `${data.reservation_date}T${data.reservation_time}`
     );
+
+    const date = new Date(data.reservation_date)
+
+    console.log(data.reservation_date);
+    console.log(date)
+    console.log(date == "Invalid Date")
+    console.log(currentDate)
+    console.log(date=="Invalid Date" || date.valueOf() < currentDate.valueOf() && date.toUTCString().slice(0, 16) !== currentDate.toUTCString().slice(0, 16)
+	||
+    resieWeekdayChecked === "Tuesday");
+    //date=="Invalid Date"
 
     try {
       properties.forEach((property) => {
@@ -75,9 +86,9 @@ function hasProperties(...properties) {
         );
         error.status = 400;
         throw error;
-      } else if (
-        Date.now() > Date.parse(reservationDate)||
-        resieWeekdayChecked === "Tuesday"
+      } else if (date=="Invalid Date" 
+          || date.valueOf() < currentDate.valueOf() && date.toUTCString().slice(0, 16) !== currentDate.toUTCString().slice(0, 16)
+          || resieWeekdayChecked === "Tuesday"
       ) {
         const error = new Error(
           `Reservation date must be in the future, and not on a day we are closed (Tuesdays)`
