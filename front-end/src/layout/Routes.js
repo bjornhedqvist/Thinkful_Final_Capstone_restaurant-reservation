@@ -8,6 +8,7 @@ import useQuery from "../utils/useQuery";
 import NewTable from "../tables/NewTable";
 import SeatReservation from "../reservations/SeatReservation"
 import { listReservations, listTables } from "../utils/api";
+import EditReservation from "../reservations/EditReservation"
 
 /**
  * Defines all the routes for the application.
@@ -53,6 +54,9 @@ function Routes() {
       <Route exact={true} path="/reservations/:reservation_id/seat">
         <SeatReservation tables={tables} loadDashboard={loadDashboard}/>
       </Route>
+      <Route path="/reservations/:reservation_id/edit">
+				<EditReservation loadDashboard={loadDashboard}/>
+			</Route>
       <Route path="/dashboard">
         <Dashboard 
           date={ date }
@@ -66,6 +70,7 @@ function Routes() {
       <Route path="/tables/new">
         <NewTable setTables={setTables}/>
       </Route>
+      
       <Route>
         <NotFound />
       </Route>

@@ -22,7 +22,7 @@ export default function SeatReservation({ tables, loadDashboard }) {
 			.then(setReservation)
 			.catch(setReservationError);
 		return () => abortController.abort();
-	}, [reservation_id]);
+	}, []);
 
 	if (!tables) return null;
 
