@@ -26,7 +26,7 @@ export default function NewTable({ setTables }){
 
 	const submitHandler = async (event) => {
 		event.preventDefault();
-		event.stopPropagation();
+		// event.stopPropagation();
 
 		if (validateFields()) {
 			await createTable(formData, abortController.signal);
@@ -38,6 +38,7 @@ export default function NewTable({ setTables }){
 
 	const validateFields = () => {
 		let foundError = null;
+        formData.capacity = Number(formData.capacity);
 
 		if (formData.table_name === "") {
 			foundError = { message: `Please fill out table name.` };
