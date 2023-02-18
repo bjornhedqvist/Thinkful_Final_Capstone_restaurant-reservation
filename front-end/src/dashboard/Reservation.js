@@ -46,7 +46,7 @@ export default function Reservation({ reservation, loadDashboard }) {
     );
 
   return (
-    <div className="card my-3">
+    <div key={(reservation_id).toString()} className="card my-3">
       <h6 className="card-header d-flex justify-content-between">
         <div>
           {first_name} {last_name}
@@ -85,6 +85,7 @@ export default function Reservation({ reservation, loadDashboard }) {
               {mobile_number}
             </p>
             <p className="card-text">People: {people}</p>
+            {/* <p className="card-text">ID: {reservation_id}</p> */}
           </div>
           <div className="d-flex justify-content-between">
             <div

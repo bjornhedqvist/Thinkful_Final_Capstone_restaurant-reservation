@@ -40,7 +40,7 @@ export default function Search(){
   const reservationsList = reservations.map(resie => {
     return (
       <>
-        <Reservation key={resie.reservation_id} reservation={resie} />
+        <Reservation key={(resie.reservation_id).toString()} reservation={resie} />
         <br />
       </>
     )
